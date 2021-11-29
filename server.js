@@ -6,7 +6,7 @@ const router = require("./router");
 const app = express();
 const mongoose = require('mongoose');
 
-const mongoConnectionString = process.env.MONGO_CONNECTION_STRING || 'localhost:27017/local';
+const mongoConnectionString = process.env.MONGO_CONNECTION_STRING || 'mongodb://localhost:27017/local';
 const port = process.env.PORT || 3000;
 
 (async () => {
