@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "628966eb-fde2-49fc-84d8-ce1dbf812f94",
-		"name": "NewmanTests",
+		"name": "users",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -183,6 +183,12 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check repsonse', function () {\r",
+							"    const deletedId = pm.environment.get('id');\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.deleted).to.eql(deletedId);\r",
 							"});"
 						],
 						"type": "text/javascript"
