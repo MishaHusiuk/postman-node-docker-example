@@ -1,5 +1,5 @@
 
-# Postman integration test example
+# Postman Node Docker example
 An example node project with basic infrastructure for automating postman integration tests.
 
 ## Project structure
