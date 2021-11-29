@@ -1,0 +1,1 @@
+npx newman run NewmanTests.postman_collection.json -e local.postman_environment.json
