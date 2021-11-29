@@ -6,18 +6,21 @@ const router = require("./router");
 const app = express();
 const mongoose = require('mongoose');
 
+const mongoConnectionString = process.env.MONGO_CONNECTION_STRING || 'localhost:27017/local';
+const port = process.env.PORT || 3000;
+
 (async () => {
   app.use(bodyParser.json());
   app.use(router())
   
   try {
-    await mongoose.connect('mongodb://localhost:27017/local', { useNewUrlParser: true });
+    await mongoose.connect(mongoConnectionString, { useNewUrlParser: true });
   } catch {
     console.log('Cannot connect to database. Exiting.');
     process.exit();
   }
 
-  app.listen(3000, () => {
-    console.log('application is listening http://localhost:3000')
+  app.listen(port, () => {
+    console.log(`application is listening http://localhost:${port}`)
   })
 })();

@@ -1,0 +1,16 @@
+version: "2.1"
+services:
+  node_api:
+    build: .
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment: 
+      MONGO_CONNECTION_STRING: 'mongodb://mongo:27017/local'
+    command: ["./scripts/wait-for-it.sh", "mongo:27017", "--", "node", "server.js"]
+  mongo:
+    image: mongo
+    ports: 
+      - "27017:27017"
+  
