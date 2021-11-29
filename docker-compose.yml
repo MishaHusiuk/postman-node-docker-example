@@ -24,6 +24,6 @@ services:
     command: 
       run NewmanTests.postman_collection.json 
       -e newman.postman_environment.json
-      --reporters="junit,cli"
+      --reporters="json,cli"
     
   
