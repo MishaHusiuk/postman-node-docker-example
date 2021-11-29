@@ -15,7 +15,7 @@ class Users {
       age: Number(age)
     });
     await user.save();
-    return new User(user.id);
+    return new User(user._id);
   }
   async remove(id) {
     await UserModel.deleteOne({ _id: id });
