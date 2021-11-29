@@ -1,12 +1,15 @@
 'use strict';
 
-const UserModel = require('../models/users');
+const Users = require('../services/Users');
 
 async function getUser(req, res) {
-  const id = req.params.id;
-  const user = await UserModel.findOne({ _id: id });
-  if(user) {
-    res.status(200).json(user);
+  const id = req.params.id;  
+  const users = new Users();
+  const user = await users.find(id);
+  
+  if(user.hasValue()) {
+    const value = await user.value();
+    res.status(200).json(value);
   } else {
     res.status(404).send();
   }
@@ -19,14 +22,10 @@ async function postUser(req, res) {
     age
   } = req.body;
 
-  const user = new UserModel({ 
-    firstName,
-    lastName,
-    age: Number(age)
-  });
-  await user.save();
-
-  res.status(201).json(user);
+  const users = new Users();
+  const user = await users.add(firstName, lastName, age);
+  const value = await user.value()
+  res.status(201).json(value);
 }
 
 async function putUser(req, res) {
@@ -36,25 +35,27 @@ async function putUser(req, res) {
     lastName,
     age
   } = req.body;
-  const user = await UserModel.findOne({ _id: id });
-  if(!user) {
-    res.status(404).send();
+  const users = new Users();
+  const user = await users.find(id);
+  if(user.hasValue()) {
+    await user.update( firstName, lastName, age);
+    const value = await user.value();
+    res.json(value);
   } else {
-    await UserModel.updateOne({ _id: id }, { firstName, lastName, age: Number(age) })
-    const user = await UserModel.findOne({ _id: id });
-    res.json(user);
+    res.status(404).send();
   }
 }
 
 async function deleteUser(req, res) {
   const id = req.params.id;
-  const user = await UserModel.findOne({ _id: id });
-  if(!user) {
-    res.status(404).send();
+  const users = new Users();
+  const user = await users.find(id);
+  if(user.hasValue()) {
+    users.remove(id);
+    res.json({ deleted: id });
   } else {
-    await UserModel.deleteOne({ _id: id });
+    res.status(404).send();
   }
-  res.json({ deleted: id });
 }
 
 module.exports = {
