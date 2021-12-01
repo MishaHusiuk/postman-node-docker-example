@@ -10,8 +10,7 @@ RUN npm install --production
 COPY . .
 
 RUN curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-RUN cp wait-for-it.sh /app/scripts
-RUN chmod +x ./scripts/wait-for-it.sh
+RUN chmod +x ./wait-for-it.sh
 
 # CMD ["node", "server.js"]
 # CMD ["./scripts/wait-for-it.sh", "mongo:27017", "--", "node", "server.js"]
