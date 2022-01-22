@@ -2,28 +2,26 @@ version: "2.1"
 services:
   mongo:
     image: mongo
-    ports: 
+    ports:
       - "27017:27017"
   # `docker-compose up node_api` to start api with mongo for local testing
   node_api:
     build: .
-    ports: 
+    ports:
       - "3000:3000"
     depends_on:
       - mongo
-    environment: 
-      MONGO_CONNECTION_STRING: 'mongodb://mongo:27017/local'
+    environment:
+      MONGO_CONNECTION_STRING: "mongodb://mongo:27017/local"
     command: ["./wait-for-it.sh", "mongo:27017", "--", "node", "server.js"]
   # `docker-compose up --abort-on-container-exit postman_tests` to run postman api tests
   postman_tests:
     image: postman/newman
-    depends_on: 
+    depends_on:
       - node_api
     volumes:
       - ./postman:/etc/newman
-    command: 
-      run collections/users.postman_collection.json 
+    command: run collections/users.postman_collection.json
+      -d collections/users-test-cases.json
       -e environments/docker_compose.postman_environment.json
       --reporters="json,cli"
-    
-  

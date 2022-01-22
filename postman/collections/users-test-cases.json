@@ -1,0 +1,15 @@
+[
+  {
+    "__description": "case 1: user with non-empty name and positive age",
+    "firstName": "Walter",
+    "lastName": "White",
+    "age": 50,
+    "newFirstName": "Mr",
+    "newLastName": "Heizenberg",
+    "newAge": 51,
+    "postStatus": 201,
+    "getStatus": 200,
+    "putStatus": 200,
+    "deleteStatus": 200
+  }
+]

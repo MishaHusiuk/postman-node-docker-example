@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "628966eb-fde2-49fc-84d8-ce1dbf812f94",
+		"_postman_id": "8d3da967-ac0b-4b62-a852-8b98a26b1ae8",
 		"name": "users",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,8 +12,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.postStatus);\r",
 							"});\r",
 							"\r",
 							"var schema = {\r",
@@ -32,12 +35,15 @@
 							"};\r",
 							"\r",
 							"pm.test('Schema is valid', function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
-							"    pm.environment.set(\"id\", jsonData.id);\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"    pm.environment.set(\"id\", response.id);\r",
 							"});\r",
 							"\r",
-							""
+							"pm.test('Data is valid', function () {\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.firstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.lastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.age);\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -54,7 +60,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"age\": \"{{$randomInt}}\"\r\n}"
+					"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"age\": \"{{age}}\"\r\n}"
 				},
 				"url": {
 					"raw": "{{host}}/users",
@@ -75,8 +81,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.getStatus);\r",
+							"});\r",
+							"\r",
+							"pm.test('Data is valid', function () {\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.firstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.lastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.age);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -113,8 +128,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.putStatus);\r",
 							"});\r",
 							"\r",
 							"var schema = {\r",
@@ -134,12 +152,10 @@
 							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
 							"});\r",
 							"\r",
-							"\r",
-							"pm.test('Check values', function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.firstName).to.eql(\"John\");\r",
-							"    pm.expect(jsonData.lastName).to.eql(\"Doe\");\r",
-							"    pm.expect(jsonData.age).to.eql(32);\r",
+							"pm.test('Data is valid', function () {\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.newFirstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.newLastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.newAge);\r",
 							"});\r",
 							"\r",
 							""
@@ -159,7 +175,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"age\": \"32\"\r\n}"
+					"raw": "{\r\n    \"firstName\": \"{{newFirstName}}\",\r\n    \"lastName\": \"{{newLastName}}\",\r\n    \"age\": \"{{newAge}}\"\r\n}"
 				},
 				"url": {
 					"raw": "{{host}}/users/{{id}}",
@@ -181,14 +197,16 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.deleteStatus);\r",
 							"});\r",
 							"\r",
 							"pm.test('Check repsonse', function () {\r",
 							"    const deletedId = pm.environment.get('id');\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.deleted).to.eql(deletedId);\r",
+							"    pm.expect(response.deleted).to.eql(deletedId);\r",
 							"});"
 						],
 						"type": "text/javascript"
