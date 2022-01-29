@@ -11,5 +11,33 @@
     "getStatus": 200,
     "putStatus": 200,
     "deleteStatus": 200
+  },
+  {
+    "__description": "case 2: create user with negative age",
+    "firstName": "Walter",
+    "lastName": "White",
+    "age": -8,
+    "newFirstName": "Walter",
+    "newLastName": "Heizenberg",
+    "newAge": 51,
+    "postStatus": 400,
+    "getStatus": 200,
+    "putStatus": 200,
+    "deleteStatus": 200,
+    "postErrors": ["-8 must be greater than or equal to 0"]
+  },
+  {
+    "__description": "case 3: create valid user, then try to update with negateive age",
+    "firstName": "Walter",
+    "lastName": "White",
+    "age": 38,
+    "newFirstName": "Walter",
+    "newLastName": "Heizenberg",
+    "newAge": -51,
+    "postStatus": 201,
+    "getStatus": 200,
+    "putStatus": 400,
+    "deleteStatus": 200,
+    "putErrors": ["-51 must be greater than or equal to 0"]
   }
 ]

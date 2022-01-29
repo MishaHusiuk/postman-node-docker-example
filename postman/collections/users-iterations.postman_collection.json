@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "8d3da967-ac0b-4b62-a852-8b98a26b1ae8",
+		"name": "users-iterations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"const isStatusSuccess = () => iterationData.postStatus === 201\r",
+							"\r",
+							"// skip following requests if the resource wasn't created successfully\r",
+							"if(!isStatusSuccess()) {\r",
+							"    postman.setNextRequest(null);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.postStatus);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"firstName\": {\r",
+							"        \"type\": \"string\"\r",
+							"    },\r",
+							"    \"lastName\": {\r",
+							"        \"type\": \"string\"\r",
+							"    },\r",
+							"    \"age\": {\r",
+							"        \"type\": \"number\"\r",
+							"    }, \r",
+							"    \"id\": {\r",
+							"        \"type\": \"number\"\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    if(!isStatusSuccess()) return;\r",
+							"    pm.expect(tv4.validate(response, schema)).to.be.true;\r",
+							"    pm.environment.set(\"id\", response.id);\r",
+							"});\r",
+							"\r",
+							"pm.test('Data is valid', function () {\r",
+							"    if(!isStatusSuccess()) return;\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.firstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.lastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.age);\r",
+							"});\r",
+							"\r",
+							"pm.test('Errors are valid', function () {\r",
+							"    if(isStatusSuccess()) return;\r",
+							"    pm.expect(response.errors).to.be.deep.equal(iterationData.postErrors)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"age\": {{age}}\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"const isStatusSuccess = () => iterationData.getStatus === 200\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.getStatus);\r",
+							"});\r",
+							"\r",
+							"pm.test('Data is valid', function () {\r",
+							"    if(!isStatusSuccess()) return;\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.firstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.lastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.age);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/users/{{id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"\r",
+							"const isStatusSuccess = () => iterationData.putStatus === 200\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.putStatus);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"firstName\": {\r",
+							"        \"type\": \"string\"\r",
+							"    },\r",
+							"    \"lastName\": {\r",
+							"        \"type\": \"string\"\r",
+							"    },\r",
+							"    \"age\": {\r",
+							"        \"type\": \"number\"\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    if(!isStatusSuccess()) return;\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test('Data is valid', function () {\r",
+							"    if(!isStatusSuccess()) return;\r",
+							"    pm.expect(response.firstName).to.be.equal(iterationData.newFirstName);\r",
+							"    pm.expect(response.lastName).to.be.equal(iterationData.newLastName);\r",
+							"    pm.expect(response.age).to.be.equal(iterationData.newAge);\r",
+							"});\r",
+							"\r",
+							"pm.test('Errors are valid', function () {\r",
+							"    if(isStatusSuccess()) return;\r",
+							"    pm.expect(response.errors).to.be.deep.equal(iterationData.putErrors)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"{{newFirstName}}\",\r\n    \"lastName\": \"{{newLastName}}\",\r\n    \"age\": {{newAge}}\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}/users/{{id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const iterationData = pm.iterationData.toObject();\r",
+							"const isStatusSuccess = () => iterationData.deleteStatus === 200;\r",
+							"\r",
+							"pm.test(\"Status code is valid\", function () {\r",
+							"    pm.response.to.have.status(iterationData.deleteStatus);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check repsonse', function () {\r",
+							"    if(!isStatusSuccess()) return; \r",
+							"    const deletedId = pm.environment.get('id');\r",
+							"    pm.expect(response.deleted).to.eql(deletedId);\r",
+							"});\r",
+							"pm.environment.unset(\"id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/users/{{id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

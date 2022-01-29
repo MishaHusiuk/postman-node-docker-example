@@ -21,7 +21,7 @@ services:
       - node_api
     volumes:
       - ./postman:/etc/newman
-    command: run collections/users.postman_collection.json
+    command: run collections/users-iterations.postman_collection.json
       -d collections/users-test-cases.json
       -e environments/docker_compose.postman_environment.json
       --reporters="json,cli"
