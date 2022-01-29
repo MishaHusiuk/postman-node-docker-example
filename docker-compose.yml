@@ -14,8 +14,18 @@ services:
     environment:
       MONGO_CONNECTION_STRING: "mongodb://mongo:27017/local"
     command: ["./wait-for-it.sh", "mongo:27017", "--", "node", "server.js"]
-  # `docker-compose up --abort-on-container-exit postman_tests` to run postman api tests
-  postman_tests:
+  # `docker-compose up --abort-on-container-exit api_tests` to run postman api tests
+  api_tests:
+    image: postman/newman
+    depends_on:
+      - node_api
+    volumes:
+      - ./postman:/etc/newman
+    command: run collections/users.postman_collection.json
+      -e environments/docker_compose.postman_environment.json
+      --reporters="json,cli"
+  # `docker-compose up --abort-on-container-exit api_iterations_tests` to run postman api tests that iterate over data file
+  api_iterations_tests:
     image: postman/newman
     depends_on:
       - node_api
