@@ -17,9 +17,8 @@ There are two postman collections that can be run separately as separate service
 
 1. [users.postman_collection](postman/collections/users.postman_collection.json) - collection of self contained tests, that have request and response hardcoded.
 2. [users-iterations.postman_collection](postman/collections/users-iterations.postman_collection.json) - collection of tests that leverage [postman data files feature](https://learning.postman.com/docs/running-collections/working-with-data-files/)
-
-- Tests are referencing the `iterationData` object, therefore they requre appropriate data file to be included in each test run
-- Respective data file: [users-test-cases](postman/collections/users-test-cases.json)
+  - Tests are referencing the `iterationData` object, therefore they requre appropriate data file to be included in each test run
+  - Respective data file: [users-test-cases](postman/collections/users-test-cases.json)
 
 ## Running
 
